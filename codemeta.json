@@ -1,0 +1,17 @@
+{
+  "@context": "https://raw.githubusercontent.com/codemeta/codemeta/master/codemeta.jsonld",
+  "@type": "Code",
+  "author": [
+
+  ],
+  "identifier": "",
+  "codeRepository": "https://github.com/williamwmarx/slant",
+  "datePublished": "2021-08-30",
+  "dateModified": "2021-08-30",
+  "dateCreated": "2021-08-30",
+  "description": "Identify and quantify bias in Python",
+  "keywords": "bias, GPT-2",
+  "license": "CC0 1.0 Universal",
+  "title": "slant",
+  "version": "v0.1.0"
+}
