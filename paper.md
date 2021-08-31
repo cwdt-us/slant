@@ -10,6 +10,7 @@ authors:
     orcid: 0000-0001-5144-8671
     affiliation: 1 # (Multiple affiliations must be quoted)
   - name: William M. Marx^[co-first author] # note this makes a footnote saying 'co-first author'
+    orcid: 0000-0002-0408-0517
     affiliation: 1
 #    orcid: 
 affiliations:
