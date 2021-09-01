@@ -45,15 +45,6 @@ vader_test_sentences = [
 print(Sentiment(text).compound)
 ```
 
-### generate
-Generate texts with GPT-2 that fall between a specified sentiment range.
-```python
-from slant import generate
-
-seeds = ["Today", "slant is a tool that"]
-print(generate(seed_phrase=seeds, n_samples=50, sentiment_range=[-0.25, 0.25]))
-```
-
 ### has\_bias\_words
 Determine whether a given text or texts contains potential bias words.
 ```python

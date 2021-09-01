@@ -7,11 +7,8 @@ license = "CC0 1.0 Universal"
 
 [tool.poetry.dependencies]
 python = "^3.6"
-numpy = "1.19.5"
-tensorflow = "1.15.2"
-gpt-2-simple = "^0.7.2"
+numpy = "^1.19.5"
 multiprocess = "^0.70.12"
-tqdm = "^4.62.2"
 
 [tool.poetry.dev-dependencies]
 yapf = "^0.31.0"
