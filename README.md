@@ -14,6 +14,11 @@ experiments, particularly those that rely on vignettes. We expect that it will b
 useful to researchers doing work in substantive areas where the bias contained in manually or
 automatically generated texts might be most problematic, such as in race and ethnic politics.
 
+## Installation
+```bash
+python3 -m pip install slant
+```
+
 ## Usage
 All code is self documented, further information can be found there.
 ### Sentiment
