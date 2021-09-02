@@ -1,5 +1,5 @@
 ---
-title: 'slant: A Python package for automatically generating experimental placebos'
+title: 'slant: A Python package for identifying and quantifying bias in texts'
 tags:
   - Python
   - experiments
