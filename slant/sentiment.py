@@ -153,8 +153,7 @@ class Sentiment:
 		for i, item in enumerate(self.tokens_lower):
 			# Check for vader_lexicon words that may be used as modifiers or negations
 			valence = 0
-			if item not in BOOSTER_DICT or i + 1 >= self.n_tokens or (item == "kind" and
-			                                                          self.tokens_lower[i + 1] == "of"):
+			if not (item in BOOSTER_DICT or (i < self.n_tokens - 1 and item == "kind" and self.tokens_lower[i + 1] == "of")):
 				valence = self.sentiment_valence(self.tokens[i], item, i)
 			sentiments.append(valence)
 
@@ -221,7 +220,7 @@ class Sentiment:
 			    self.tokens_lower[i - 1] == "no") or (i > 1 and self.tokens_lower[i - 2] == "no") or (
 			        i > 2 and self.tokens_lower[i - 3] == "no" and
 			        self.tokens_lower[i - 1] in ["or", "nor"]):
-				valence = lexicon_dict[item_lowercase] * NEGATOR_SCALAR
+				valence *= NEGATOR_SCALAR
 
 			# Check if sentiment laden word is in ALL CAPS (while others aren't)
 			if item.isupper() and self.upper_diff:
@@ -241,8 +240,10 @@ class Sentiment:
 					if start_i == 2:
 						valence = self.special_idioms_check(valence, i)
 
-			# Check for negation case using "least"
-			if i > 2 and " ".join(self.tokens_lower[i - 2:i]) not in ["at least", "very least"]:
+			if i > 1 and self.tokens_lower[i - 1] not in lexicon_dict and self.tokens_lower[i - 1] == "least":
+				if self.tokens_lower[i - 2] not in ["at", "very"]:
+					valence *= NEGATOR_SCALAR
+			elif i > 0 and self.tokens_lower[i - 1] not in lexicon_dict and self.tokens_lower[i - 1] == "least":
 				valence *= NEGATOR_SCALAR
 		return valence
 
@@ -278,20 +279,20 @@ class Sentiment:
 			valence (float): Special case valence
 
 		"""
-		onezero = " ".join(self.tokens_lower[i - 1:i])
-		twoonezero = " ".join(self.tokens_lower[i - 2:i])
-		twoone = " ".join(self.tokens_lower[i - 2:i - 1])
-		threetwoone = " ".join(self.tokens_lower[i - 3:i - 1])
-		threetwo = " ".join(self.tokens_lower[i - 3:i - 2])
+		onezero = " ".join(self.tokens_lower[i - 1:i+1])
+		twoonezero = " ".join(self.tokens_lower[i - 2:i+1])
+		twoone = " ".join(self.tokens_lower[i - 2:i])
+		threetwoone = " ".join(self.tokens_lower[i - 3:i])
+		threetwo = " ".join(self.tokens_lower[i - 3:i - 1])
 		for seq in [onezero, twoonezero, twoone, threetwoone, threetwo]:
 			if seq in SPECIAL_CASES:
 				valence = SPECIAL_CASES[seq]
 				break
 
 		if i < self.n_tokens - 1:
-			valence = SPECIAL_CASES.get(" ".join(self.tokens_lower[i:i + 1]), valence)
-		if i < self.n_tokens - 2:
 			valence = SPECIAL_CASES.get(" ".join(self.tokens_lower[i:i + 2]), valence)
+		if i < self.n_tokens - 2:
+			valence = SPECIAL_CASES.get(" ".join(self.tokens_lower[i:i + 3]), valence)
 
 		# Check for booster/dampener bi-grams such as "sort of" or "kind of"
 		n_grams = [threetwoone, threetwo, twoone]
@@ -331,7 +332,7 @@ class Sentiment:
 		if start_i == 0 and self.negated(two_before):
 			valence *= NEGATOR_SCALAR
 		if start_i == 1:
-			if " ".join(self.tokens_lower[i - 1:i]) in ["never so", "never this"]:
+			if " ".join(self.tokens_lower[i - 2:i]) in ["never so", "never this"]:
 				valence *= 1.25
 			elif " ".join(self.tokens_lower[i - 2:i]) != "without doubt" and self.negated(two_before):
 				valence *= NEGATOR_SCALAR
@@ -396,7 +397,11 @@ class Sentiment:
 			sum_s += punct_emph_amplifier if sum_s > 0 else -1 * punct_emph_amplifier
 			# discriminate between positive, negative and neutral sentiment scores
 			pos_sum, neg_sum, neu_count = self.sift_sentiment_scores(sentiments)
-			pos_sum += punct_emph_amplifier if pos_sum > np.abs(neg_sum) else -1 * punct_emph_amplifier
+			abs_neg_sum = np.abs(neg_sum)
+			if pos_sum > abs_neg_sum:
+				pos_sum += punct_emph_amplifier
+			elif abs_neg_sum > pos_sum:
+				neg_sum -= punct_emph_amplifier
 			total = pos_sum + np.abs(neg_sum) + neu_count
 			neg = np.abs(neg_sum / total)
 			neu = np.abs(neu_count / total)
