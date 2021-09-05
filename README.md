@@ -21,10 +21,10 @@ python3 -m pip install slant
 
 ## Usage
 All code is self documented, further information can be found there.
-### Sentiment
+### sentiment
 Get the VADER sentiment score of a given text or texts.
 ```python
-from slant import Sentiment
+from slant import sentiment
 
 vader_test_sentences = [
 	"VADER is smart, handsome, and funny.", "VADER is smart, handsome, and funny!",
@@ -38,7 +38,7 @@ vader_test_sentences = [
 	"Catch utf-8 emoji such as 💘 and 💋 and 😁", "Not bad at all"
 ]
 
-print(Sentiment(vader_test_sentences).compound)
+print(sentiment(vader_test_sentences))
 ```
 
 ### has\_bias\_words

@@ -92,7 +92,7 @@ def is_upper_diff(text: str) -> bool:
 	return False
 
 
-class Sentiment:
+class sentiment:
 	"""Calculate the sentiment of a given text.
 
 	Attributes:
@@ -103,7 +103,7 @@ class Sentiment:
 	"""
 
 	def __init__(self, text: Union[str, Iterable[str]]):
-		"""Instantiate Sentiment class.
+		"""Instantiate sentiment class.
 
 		Args:
 			text (str | Iterable[str]): Text to score
@@ -118,10 +118,26 @@ class Sentiment:
 		else:
 			with Pool(cpu_count()) as pool:
 				sentiments = pool.map(self.score, text)
-				self.neg = [sentiment["neg"] for sentiment in sentiments]
-				self.neu = [sentiment["neu"] for sentiment in sentiments]
-				self.pos = [sentiment["pos"] for sentiment in sentiments]
-				self.compound = [sentiment["compound"] for sentiment in sentiments]
+				self.neg = [s["neg"] for s in sentiments]
+				self.neu = [s["neu"] for s in sentiments]
+				self.pos = [s["pos"] for s in sentiments]
+				self.compound = [s["compound"] for s in sentiments]
+
+	def __float__(self) -> float:
+		"""float dunder method.
+
+		Returns:
+			float: Compound score as a float
+		"""
+		return str(self.compound)
+
+	def __str__(self) -> str:
+		"""str dunder method.
+
+		Returns:
+			str: Compound score as a string
+		"""
+		return str(self.compound)
 
 	def score(self, text: str) -> dict:
 		"""Score text.
@@ -153,7 +169,8 @@ class Sentiment:
 		for i, item in enumerate(self.tokens_lower):
 			# Check for vader_lexicon words that may be used as modifiers or negations
 			valence = 0
-			if not (item in BOOSTER_DICT or (i < self.n_tokens - 1 and item == "kind" and self.tokens_lower[i + 1] == "of")):
+			if not (item in BOOSTER_DICT or
+			        (i < self.n_tokens - 1 and item == "kind" and self.tokens_lower[i + 1] == "of")):
 				valence = self.sentiment_valence(self.tokens[i], item, i)
 			sentiments.append(valence)
 
@@ -240,10 +257,13 @@ class Sentiment:
 					if start_i == 2:
 						valence = self.special_idioms_check(valence, i)
 
-			if i > 1 and self.tokens_lower[i - 1] not in lexicon_dict and self.tokens_lower[i - 1] == "least":
+			if i > 1 and self.tokens_lower[i - 1] not in lexicon_dict and self.tokens_lower[i -
+			                                                                                1] == "least":
 				if self.tokens_lower[i - 2] not in ["at", "very"]:
 					valence *= NEGATOR_SCALAR
-			elif i > 0 and self.tokens_lower[i - 1] not in lexicon_dict and self.tokens_lower[i - 1] == "least":
+			elif i > 0 and self.tokens_lower[i -
+			                                 1] not in lexicon_dict and self.tokens_lower[i -
+			                                                                              1] == "least":
 				valence *= NEGATOR_SCALAR
 		return valence
 
@@ -260,12 +280,12 @@ class Sentiment:
 		# check for modification in sentiment due to contrastive conjunction "but"
 		if "but" in self.tokens_lower:
 			bi = self.tokens_lower.index("but")
-			for sentiment in sentiments:
-				si = sentiments.index(sentiment)
+			for sent in sentiments:
+				si = sentiments.index(sent)
 				if si < bi:
-					sentiments[si] = sentiment / 2
+					sentiments[si] = sent / 2
 				elif si > bi:
-					sentiments[si] = sentiment * 1.5
+					sentiments[si] = sent * 1.5
 		return sentiments
 
 	def special_idioms_check(self, valence: float, i: int) -> float:
@@ -279,8 +299,8 @@ class Sentiment:
 			valence (float): Special case valence
 
 		"""
-		onezero = " ".join(self.tokens_lower[i - 1:i+1])
-		twoonezero = " ".join(self.tokens_lower[i - 2:i+1])
+		onezero = " ".join(self.tokens_lower[i - 1:i + 1])
+		twoonezero = " ".join(self.tokens_lower[i - 2:i + 1])
 		twoone = " ".join(self.tokens_lower[i - 2:i])
 		threetwoone = " ".join(self.tokens_lower[i - 3:i])
 		threetwo = " ".join(self.tokens_lower[i - 3:i - 1])

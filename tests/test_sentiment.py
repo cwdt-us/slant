@@ -29,10 +29,7 @@ def test_vader_compound():
 	analyzer = SentimentIntensityAnalyzer()
 	for sentence in vader_test_sentences:
 		vader_sentiments.append(analyzer.polarity_scores(sentence)["compound"])
-	for t, i, j in zip(vader_test_sentences, vader_sentiments, slant.Sentiment(vader_test_sentences).compound):
-		if i != j:
-			print(t, i, j)
-	assert vader_sentiments == slant.Sentiment(vader_test_sentences).compound
+	assert vader_sentiments == slant.sentiment(vader_test_sentences).compound
 
 def test_vader_neg():
 	"""Ensure no duplicates in slant.bias_words"""
@@ -40,7 +37,7 @@ def test_vader_neg():
 	analyzer = SentimentIntensityAnalyzer()
 	for sentence in vader_test_sentences:
 		vader_sentiments.append(analyzer.polarity_scores(sentence)["neg"])
-	assert vader_sentiments == slant.Sentiment(vader_test_sentences).neg
+	assert vader_sentiments == slant.sentiment(vader_test_sentences).neg
 
 
 def test_vader_neu():
@@ -49,7 +46,7 @@ def test_vader_neu():
 	analyzer = SentimentIntensityAnalyzer()
 	for sentence in vader_test_sentences:
 		vader_sentiments.append(analyzer.polarity_scores(sentence)["neu"])
-	assert vader_sentiments == slant.Sentiment(vader_test_sentences).neu
+	assert vader_sentiments == slant.sentiment(vader_test_sentences).neu
 
 def test_vader_pos():
 	"""Ensure no duplicates in slant.bias_words"""
@@ -57,4 +54,4 @@ def test_vader_pos():
 	analyzer = SentimentIntensityAnalyzer()
 	for sentence in vader_test_sentences:
 		vader_sentiments.append(analyzer.polarity_scores(sentence)["pos"])
-	assert vader_sentiments == slant.Sentiment(vader_test_sentences).pos
+	assert vader_sentiments == slant.sentiment(vader_test_sentences).pos

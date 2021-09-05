@@ -11,10 +11,9 @@ from slant.utils import (VALID_WORD_CHARS, build_list_from_file, build_trie_from
 
 bias_words = build_list_from_file(local_path("bias_words.txt"))
 
-def has_bias_words(
-    text: Union[Iterable[str], str],
-    blacklist: Union[Iterable[str], str, PosixPath] = bias_words
-) -> bool:
+
+def has_bias_words(text: Union[Iterable[str], str],
+                   blacklist: Union[Iterable[str], str, PosixPath] = bias_words) -> bool:
 	"""Determine if a given text has bias words in it.
 
 	Args:
@@ -42,10 +41,8 @@ def has_bias_words(
 			                text)
 
 
-def get_bias_words(
-    text: Union[Iterable[str], str],
-    blacklist: Union[Iterable[str], str, PosixPath] = bias_words
-) -> bool:
+def get_bias_words(text: Union[Iterable[str], str],
+                   blacklist: Union[Iterable[str], str, PosixPath] = bias_words) -> bool:
 	"""Get all bias words in a given text or texts.
 
 	Args:
