@@ -73,7 +73,7 @@ def get_top_words(text: str, blacktrie: dict, top_n: int) -> List[str]:
 			# Non-word char found and not at an end node of the trie, update found_words
 			if current_lower_word in found_words:
 				found_words[current_lower_word]["count"] += 1
-			else:
+			elif current_lower_word not in set("aio"):
 				found_words[current_lower_word] = {"word": current_word, "count": 1}
 			current_word = ""
 			current_lower_word = ""
@@ -81,7 +81,7 @@ def get_top_words(text: str, blacktrie: dict, top_n: int) -> List[str]:
 		if idx + 1 >= text_len and current_word:
 			if current_lower_word in found_words:
 				found_words[current_lower_word]["count"] += 1
-			else:
+			elif current_lower_word not in set("aio"):
 				found_words[current_lower_word] = {"word": current_word, "count": 1}
 			current_word = ""
 			current_lower_word = ""

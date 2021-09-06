@@ -129,7 +129,7 @@ class sentiment:
 		Returns:
 			float: Compound score as a float
 		"""
-		return str(self.compound)
+		return float(self.compound)
 
 	def __str__(self) -> str:
 		"""str dunder method.
