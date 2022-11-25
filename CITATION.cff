@@ -1,0 +1,17 @@
+cff-version: 1.2.0
+title: slant
+message: >-
+  If you use this software, please cite it using the
+  metadata from this file.
+type: software
+authors:
+  - given-names: William W.
+    family-names: Marx
+    email: marx.22@dartmouth.edu
+    affiliation: Dartmouth College
+    orcid: 'https://orcid.org/0000-0002-0408-0517'
+  - given-names: Charles
+    family-names: Crabtree
+    orcid: 'https://orcid.org/0000-0001-5144-8671'
+    affiliation: Dartmouth College
+    email: crabtree@dartmouth.edu
